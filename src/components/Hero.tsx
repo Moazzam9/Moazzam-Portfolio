@@ -107,10 +107,10 @@ const Hero: React.FC = () => {
               {/* Glowing background effect */}
               <div className="absolute inset-0 bg-gradient-to-r from-orange-100/40 to-orange-300/40 dark:from-orange-400/20 dark:to-orange-500/20 blur-3xl rounded-full transform scale-150 animate-pulse"></div>
 
-              <h1 className="relative text-2xl md:text-3xl text-gray-700 dark:text-gray-300 mb-4 font-light">
+              <h1 className="relative text-lg xs:text-xl sm:text-2xl md:text-3xl text-gray-700 dark:text-gray-300 mb-2 font-light">
                 Hi, I'm
               </h1>
-              <h2 className="relative text-5xl md:text-7xl lg:text-8xl font-bold text-gray-900 dark:text-white mb-6 leading-tight">
+              <h2 className="relative text-3xl xs:text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-bold text-gray-900 dark:text-white mb-3 leading-tight">
                 <span className="inline-block">
                   Moazzam
                 </span>{' '}
@@ -118,10 +118,10 @@ const Hero: React.FC = () => {
                   Azam
                 </span>
               </h2>
-              <h3 className="relative text-2xl md:text-3xl text-gray-800 dark:text-gray-200 mb-8 font-medium">
+              <h3 className="relative text-lg xs:text-xl sm:text-2xl md:text-3xl text-gray-800 dark:text-gray-200 mb-5 font-medium">
                 Computer Science Student & Developer
               </h3>
-              <p className="relative text-lg md:text-xl text-gray-700 dark:text-gray-300 mb-12 max-w-3xl mx-auto leading-relaxed">
+              <p className="relative text-base xs:text-lg sm:text-xl text-gray-700 dark:text-gray-300 mb-8 sm:mb-12 max-w-3xl mx-auto leading-relaxed">
                 Bachelor's in Computer Science at COMSATS University Islamabad.
                 Passionate about creating innovative web and mobile solutions that make a difference.
               </p>
@@ -129,7 +129,7 @@ const Hero: React.FC = () => {
           </div>
 
           {/* Liquid Fill Action Buttons */}
-          <div className={`flex flex-col sm:flex-row justify-center items-center gap-6 mb-16 transition-all duration-1000 delay-200 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+          <div className={`flex flex-col sm:flex-row justify-center items-center gap-4 sm:gap-6 mb-8 sm:mb-16 transition-all duration-1000 delay-200 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
             <LiquidFillButton
               variant="primary"
               size="lg"
@@ -154,7 +154,7 @@ const Hero: React.FC = () => {
           </div>
 
           {/* Social Links */}
-          <div className={`flex justify-center space-x-6 mb-16 transition-all duration-1000 delay-300 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+          <div className={`flex justify-center space-x-4 sm:space-x-6 mb-8 sm:mb-16 transition-all duration-1000 delay-300 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
             {socialLinks.map((social, index) => (
               <a
                 key={index}
