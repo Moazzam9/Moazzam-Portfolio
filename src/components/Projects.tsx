@@ -1,4 +1,4 @@
-git import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { ExternalLink, Github, Filter, Send } from 'lucide-react';
 import LiquidFillButton from './LiquidFillButton';
 import LaunchKitImage from '../../1.JPG';
