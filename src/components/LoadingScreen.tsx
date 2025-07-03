@@ -19,7 +19,7 @@ const LoadingScreen: React.FC = () => {
                 zIndex: 0,
             }} />
             {/* Glassy blur behind loader */}
-            <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 backdrop-blur-xl bg-white/5 rounded-full" style={{
+            <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-black/80 rounded-full" style={{
                 width: 2 * RADIUS + 80,
                 height: 2 * RADIUS + 80,
                 zIndex: 1,
@@ -64,8 +64,9 @@ const LoadingScreen: React.FC = () => {
                     );
                 })}
                 {/* Center text with animated glow */}
-                <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-3xl font-extrabold tracking-widest select-none animate-text-glow text-white" style={{
-                    textShadow: `0 0 64px ${ORANGE}, 0 0 32px #fff, 0 0 16px ${ORANGE}, 0 0 32px ${ORANGE}`,
+                <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-3xl font-extrabold tracking-widest select-none animate-text-glow" style={{
+                    color: '#ea580c',
+                    textShadow: `0 0 2px #fff, 0 0 4px #fff, 0 0 8px #fff, 0 0 12px #ea580c, 0 0 24px #ea580c`,
                     zIndex: 3,
                     letterSpacing: '0.25em',
                 }}>

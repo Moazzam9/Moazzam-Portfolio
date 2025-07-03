@@ -22,7 +22,7 @@ const Hero: React.FC = () => {
 
   const socialLinks = [
     { icon: Github, href: 'https://github.com/Moazzam9', label: 'GitHub' },
-    { icon: Linkedin, href: '#', label: 'LinkedIn' },
+    { icon: Linkedin, href: 'https://www.linkedin.com/in/moazzam-azam-963778316?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app', label: 'LinkedIn' },
     { icon: Instagram, href: '#', label: 'Instagram' },
   ];
 

@@ -5,6 +5,8 @@ import emailjs from '@emailjs/browser';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
+const ORANGE = '#fb923c';
+
 const Contact: React.FC = () => {
   const [formData, setFormData] = useState({
     name: '',
@@ -55,14 +57,14 @@ const Contact: React.FC = () => {
     {
       icon: Mail,
       label: 'Email',
-      value: 'moazzam@example.com',
-      href: 'mailto:moazzam@example.com'
+      value: 'moazzamkk13@gmail.com',
+      href: 'mailto:moazzamkk13@gmail.com'
     },
     {
       icon: Phone,
       label: 'Phone',
-      value: '+92 300 1234567',
-      href: 'tel:+923001234567'
+      value: '+92 3156474235',
+      href: 'tel:+923156474235'
     },
     {
       icon: MapPin,
@@ -73,8 +75,8 @@ const Contact: React.FC = () => {
   ];
 
   const socialLinks = [
-    { icon: Github, href: '#', label: 'GitHub' },
-    { icon: Linkedin, href: '#', label: 'LinkedIn' },
+    { icon: Github, href: 'https://github.com/Moazzam9', label: 'GitHub' },
+    { icon: Linkedin, href: 'https://www.linkedin.com/in/moazzam-azam-963778316?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app', label: 'LinkedIn' },
     { icon: Instagram, href: '#', label: 'Instagram' },
   ];
 
