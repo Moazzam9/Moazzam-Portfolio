@@ -1,12 +1,12 @@
-import React, { useState, useEffect, Suspense } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ThemeProvider } from './contexts/ThemeContext';
 import Header from './components/Header';
 import Hero from './components/Hero';
 import About from './components/About';
-const Skills = React.lazy(() => import('./components/Skills'));
-const Projects = React.lazy(() => import('./components/Projects'));
+import Skills from './components/Skills';
+import Projects from './components/Projects';
 import Education from './components/Education';
-const Contact = React.lazy(() => import('./components/Contact'));
+import Contact from './components/Contact';
 import Footer from './components/Footer';
 import LoadingScreen from './components/LoadingScreen';
 
@@ -27,16 +27,10 @@ function App() {
         <main>
           <Hero />
           <About />
-          <Suspense fallback={<div>Loading...</div>}>
-            <Skills />
-          </Suspense>
-          <Suspense fallback={<div>Loading...</div>}>
-            <Projects />
-          </Suspense>
+          <Skills />
+          <Projects />
           <Education />
-          <Suspense fallback={<div>Loading...</div>}>
-            <Contact />
-          </Suspense>
+          <Contact />
         </main>
         <Footer />
       </div>
