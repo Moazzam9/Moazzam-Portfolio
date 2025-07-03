@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 const Skills: React.FC = () => {
   const skillCategories = [
@@ -34,6 +34,38 @@ const Skills: React.FC = () => {
     }
   ];
 
+  // State to animate each skill bar
+  const [fillLevels, setFillLevels] = useState(
+    skillCategories.map(cat => cat.skills.map(() => 0))
+  );
+  const [glow, setGlow] = useState(
+    skillCategories.map(cat => cat.skills.map(() => false))
+  );
+
+  useEffect(() => {
+    // Animate each bar
+    skillCategories.forEach((cat, catIdx) => {
+      cat.skills.forEach((skill, skillIdx) => {
+        setTimeout(() => {
+          setFillLevels(prev => {
+            const updated = prev.map(arr => [...arr]);
+            updated[catIdx][skillIdx] = skill.level;
+            return updated;
+          });
+          // Add glow after fill
+          setTimeout(() => {
+            setGlow(prev => {
+              const updated = prev.map(arr => [...arr]);
+              updated[catIdx][skillIdx] = true;
+              return updated;
+            });
+          }, 1100);
+        }, 300 * (catIdx * 5 + skillIdx));
+      });
+    });
+    // eslint-disable-next-line
+  }, []);
+
   return (
     <section id="skills" className="py-20 bg-gray-50 dark:bg-black">
       <div className="container mx-auto px-6">
@@ -66,8 +98,8 @@ const Skills: React.FC = () => {
                       </div>
                       <div className="w-full bg-gray-700 rounded-full h-2">
                         <div
-                          className="bg-gradient-to-r from-orange-500 to-orange-400 h-2 rounded-full transition-all duration-1000 ease-out"
-                          style={{ width: `${skill.level}%` }}
+                          className={`bg-gradient-to-r from-orange-600 to-orange-500 h-2 rounded-full transition-all duration-1000 ease-out ${glow[categoryIndex][skillIndex] ? 'shadow-[0_0_16px_4px_rgba(234,88,12,0.8)]' : ''}`}
+                          style={{ width: `${fillLevels[categoryIndex][skillIndex]}%` }}
                         ></div>
                       </div>
                     </div>

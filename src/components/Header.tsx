@@ -59,7 +59,7 @@ const Header: React.FC = () => {
       <nav className="container mx-auto px-6 py-4">
         <div className="flex items-center justify-between">
           <div className="text-2xl font-bold text-gray-900 dark:text-white">
-            Moazzam<span className="text-orange-500">.</span>
+            Moazzam<span className="text-orange-500 animate-blink">.</span>
           </div>
 
           {/* Desktop Navigation */}
