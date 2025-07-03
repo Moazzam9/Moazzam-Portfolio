@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { ExternalLink, Github, Filter } from 'lucide-react';
+import { ExternalLink, Github, Filter, Send } from 'lucide-react';
 import LiquidFillButton from './LiquidFillButton';
+import LaunchKitImage from '../../1.JPG';
 
 const Projects: React.FC = () => {
   const [activeFilter, setActiveFilter] = useState('All');
@@ -9,6 +10,7 @@ const Projects: React.FC = () => {
   // 3D card hover state
   const [hoveredCard, setHoveredCard] = useState<number | null>(null);
   const [cardStyle, setCardStyle] = useState<{ [key: number]: React.CSSProperties }>({});
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -34,13 +36,13 @@ const Projects: React.FC = () => {
   const projects = [
     {
       id: 1,
-      title: 'Tech and Beyond Blog',
-      description: 'A WordPress blog with custom theme focusing on technology trends and tutorials.',
-      image: 'https://images.pexels.com/photos/267350/pexels-photo-267350.jpeg?auto=compress&cs=tinysrgb&w=800',
-      tech: ['WordPress', 'PHP', 'MySQL', 'CSS'],
+      title: 'Launch kit',
+      description: 'Website designs and development for a startup company.',
+      image: '/1.JPG',
+      tech: ['React.js', 'Tailwind CSS', 'Node.js', 'Supabase'],
       category: 'Web',
-      demoLink: '#',
-      codeLink: '#',
+      demoLink: 'https://launch-kits.vercel.app/',
+      codeLink: 'https://github.com/Moazzam9/launch-kits',
       gradient: 'from-orange-500 to-orange-400'
     },
     {
@@ -81,7 +83,7 @@ const Projects: React.FC = () => {
       title: 'E-Commerce Platform',
       description: 'Full-stack e-commerce solution with payment integration and admin dashboard.',
       image: 'https://images.pexels.com/photos/230544/pexels-photo-230544.jpeg?auto=compress&cs=tinysrgb&w=800',
-      tech: ['Node.js', 'Express', 'MongoDB', 'Stripe API'],
+      tech: ['Node.js', 'Express', 'Firebase ', 'Stripe API'],
       category: 'Web',
       demoLink: '#',
       codeLink: '#',

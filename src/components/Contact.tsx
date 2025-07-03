@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import { Mail, Phone, MapPin, Send, Github, Linkedin, Instagram } from 'lucide-react';
 import LiquidFillButton from './LiquidFillButton';
+import emailjs from '@emailjs/browser';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Contact: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -19,10 +22,33 @@ const Contact: React.FC = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle form submission
-    console.log('Form submitted:', formData);
-    // Reset form
-    setFormData({ name: '', email: '', subject: '', message: '' });
+
+    emailjs.send(
+      'service_ewer1dk', // Service ID
+      'template_bmp54kd', // Template ID
+      {
+        name: formData.name,
+        email: formData.email,
+        subject: formData.subject,
+        message: formData.message,
+      },
+      'TplVHZl1Vn3zyNo_r' // Public Key
+    )
+      .then((result) => {
+        toast.success('Message sent successfully!', {
+          position: 'top-center',
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: 'colored',
+        });
+        setFormData({ name: '', email: '', subject: '', message: '' });
+      }, (error) => {
+        alert('Failed to send message. Please try again.');
+      });
   };
 
   const contactInfo = [
@@ -204,6 +230,7 @@ const Contact: React.FC = () => {
           </div>
         </div>
       </div>
+      <ToastContainer />
     </section>
   );
 };
