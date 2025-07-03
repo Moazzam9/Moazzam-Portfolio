@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+git import React, { useState, useEffect, useRef } from 'react';
 import { ExternalLink, Github, Filter, Send } from 'lucide-react';
 import LiquidFillButton from './LiquidFillButton';
 import LaunchKitImage from '../../1.JPG';
@@ -38,7 +38,7 @@ const Projects: React.FC = () => {
       id: 1,
       title: 'Launch kit',
       description: 'Website designs and development for a startup company.',
-      image: '/1.JPG',
+      image: '/1.webp',
       tech: ['React.js', 'Tailwind CSS', 'Node.js', 'Supabase'],
       category: 'Web',
       demoLink: 'https://launch-kits.vercel.app/',
