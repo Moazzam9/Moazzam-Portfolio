@@ -80,13 +80,13 @@ const Projects: React.FC = () => {
     },
     {
       id: 5,
-      title: 'E-Commerce Platform',
-      description: 'Full-stack e-commerce solution with payment integration and admin dashboard.',
-      image: 'https://images.pexels.com/photos/230544/pexels-photo-230544.jpeg?auto=compress&cs=tinysrgb&w=800',
-      tech: ['Node.js', 'Express', 'Firebase ', 'Stripe API'],
+      title: 'Zebra Puzzle Game',
+      description: 'The application provides an engaging user interface for solving various logic puzzles while offering features like puzzle selection, hints, and real-time feedback.',
+      image: '/3.jpg',
+      tech: ['React', 'Python'],
       category: 'Web',
-      demoLink: '#',
-      codeLink: '#',
+      demoLink: 'https://github.com/Moazzam9/Zebra-Puzzle-Game/tree/master',
+      codeLink: 'https://github.com/Moazzam9/Zebra-Puzzle-Game/tree/master',
       gradient: 'from-orange-600 to-orange-400'
     },
     {
