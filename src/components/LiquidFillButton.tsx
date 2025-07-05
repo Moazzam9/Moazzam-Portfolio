@@ -7,7 +7,7 @@ interface LiquidFillButtonProps {
   href?: string;
   variant?: 'primary' | 'secondary' | 'ghost';
   size?: 'sm' | 'md' | 'lg';
-  icon?: LucideIcon;
+  icon?: typeof LucideIcon;
   className?: string;
   disabled?: boolean;
   fillDirection?: 'bottom-up' | 'top-down' | 'left-right' | 'right-left' | 'center-out';
@@ -29,53 +29,54 @@ const LiquidFillButton: React.FC<LiquidFillButtonProps> = ({
   const [isHovered, setIsHovered] = useState(false);
   const [fillProgress, setFillProgress] = useState(0);
   const buttonRef = useRef<HTMLButtonElement>(null);
-  const animationRef = useRef<number>();
 
-  // Simple fill/drain animation
   useEffect(() => {
-    if (isHovered) {
-      // Fill animation
-      let progress = 0;
-      const startTime = Date.now();
+    let animationFrame: number;
+    let startTime: number | undefined;
+    let running = true;
 
-      const animate = () => {
-        const elapsed = Date.now() - startTime;
-        progress = Math.min(elapsed / animationDuration, 1);
+    const animateFill = (timestamp: number, localStartProgress: number) => {
+      if (!startTime) startTime = timestamp;
+      const elapsed = timestamp - startTime;
+      const progress = Math.min(elapsed / animationDuration, 1);
+      // Smooth cubic ease-out
+      const easedProgress = localStartProgress + (1 - Math.pow(1 - progress, 3)) * (1 - localStartProgress);
+      setFillProgress(easedProgress);
+      if (progress < 1 && running) {
+        animationFrame = requestAnimationFrame((ts) => animateFill(ts, localStartProgress));
+      } else {
+        setFillProgress(1);
+      }
+    };
 
-        // Smooth easing
-        const easedProgress = 1 - Math.pow(1 - progress, 3);
-        setFillProgress(easedProgress);
-
-        if (progress < 1) {
-          animationRef.current = requestAnimationFrame(animate);
-        }
-      };
-
-      animate();
-    } else {
-      // Drain animation
-      let progress = 0;
-      const startTime = Date.now();
+    const animateDrain = (timestamp: number, localStartProgress: number) => {
+      if (!startTime) startTime = timestamp;
       const drainDuration = animationDuration * 0.7;
+      const elapsed = timestamp - startTime;
+      const progress = Math.min(elapsed / drainDuration, 1);
+      // Smooth quadratic ease-in
+      const easedProgress = localStartProgress * (1 - Math.pow(progress, 2));
+      setFillProgress(easedProgress);
+      if (progress < 1 && running) {
+        animationFrame = requestAnimationFrame((ts) => animateDrain(ts, localStartProgress));
+      } else {
+        setFillProgress(0);
+      }
+    };
 
-      const animate = () => {
-        const elapsed = Date.now() - startTime;
-        progress = Math.min(elapsed / drainDuration, 1);
-
-        const easedProgress = Math.pow(progress, 2);
-        setFillProgress(Math.max(0, 1 - easedProgress));
-
-        if (progress < 1) {
-          animationRef.current = requestAnimationFrame(animate);
-        }
-      };
-
-      animate();
+    if (isHovered) {
+      const localStartProgress = fillProgress;
+      animationFrame = requestAnimationFrame((ts) => animateFill(ts, localStartProgress));
+    } else {
+      const localStartProgress = fillProgress;
+      animationFrame = requestAnimationFrame((ts) => animateDrain(ts, localStartProgress));
     }
 
     return () => {
-      if (animationRef.current) cancelAnimationFrame(animationRef.current);
+      running = false;
+      if (animationFrame) cancelAnimationFrame(animationFrame);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isHovered, animationDuration]);
 
   const handleClick = (e: React.MouseEvent) => {

@@ -147,7 +147,14 @@ const Hero: React.FC = () => {
               icon={Download}
               fillDirection="left-right"
               animationDuration={700}
-              onClick={() => console.log('Download CV')}
+              onClick={() => {
+                const link = document.createElement('a');
+                link.href = '/My-cv.pdf';
+                link.download = 'Moazzam-CV.pdf';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+              }}
             >
               Download CV
             </LiquidFillButton>

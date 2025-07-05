@@ -47,14 +47,14 @@ const Projects: React.FC = () => {
     },
     {
       id: 2,
-      title: 'Airline Management System',
-      description: 'Java-based desktop application for managing airline reservations and bookings.',
-      image: 'https://images.pexels.com/photos/358319/pexels-photo-358319.jpeg?auto=compress&cs=tinysrgb&w=800',
-      tech: ['Java', 'Swing', 'MySQL', 'JDBC'],
-      category: 'Desktop',
-      demoLink: '#',
-      codeLink: '#',
-      gradient: 'from-gray-700 to-black'
+      title: 'LuxeFinds E-Commerce Platform',
+      description: 'Full-stack e-commerce solution with payment integration and admin dashboard.',
+      image: '/2.JPG',
+      tech: ['React', 'Express', 'Firebase ', 'Stripe API'],
+      category: 'Web',
+      demoLink: 'https://luxafinds.vercel.app/',
+      codeLink: 'https://github.com/Moazzam9/luxefinds',
+      gradient: 'from-orange-600 to-orange-400'
     },
     {
       id: 3,
@@ -69,8 +69,8 @@ const Projects: React.FC = () => {
     },
     {
       id: 4,
-      title: 'Task Management App',
-      description: 'A mobile-first task management application with real-time collaboration features.',
+      title: 'Servify (Under Development)',
+      description: 'Servify Application is a comprehensive service platform that connects users with professional service providers such as plumbers, electricians, carpenters, doctors (for both pets and humans), and event decorators.',
       image: 'https://images.pexels.com/photos/3183150/pexels-photo-3183150.jpeg?auto=compress&cs=tinysrgb&w=800',
       tech: ['React Native', 'Firebase', 'Redux', 'AsyncStorage'],
       category: 'Mobile',

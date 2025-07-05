@@ -20,7 +20,7 @@ const Footer: React.FC = () => {
           <div className="mt-4 text-sm text-slate-500">
             © {new Date().getFullYear()} All rights reserved.
           </div>
-          <a className="text-orange-500 hover:underline" href="mailto:moazzam@example.com">moazzam@example.com</a>
+          <a className="text-orange-500 hover:underline" href="mailto:moazzamkk13@gmail.com">moazzamkk13@gmail.com</a>
         </div>
       </div>
     </footer>
