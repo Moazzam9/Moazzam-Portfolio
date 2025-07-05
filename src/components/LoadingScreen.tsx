@@ -4,7 +4,7 @@ const DOTS = 24;
 const RADIUS = 70; // px
 const DOT_SIZE = 10; // px
 const ACTIVE_DOT_SIZE = 20; // px
-const ORANGE = '#fb923c';
+const ORANGE = '#ff5e00';
 
 const LoadingScreen: React.FC = () => {
     return (
@@ -65,7 +65,7 @@ const LoadingScreen: React.FC = () => {
                 })}
                 {/* Center text with animated glow */}
                 <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-3xl font-extrabold tracking-widest select-none animate-text-glow" style={{
-                    color: '#ea580c',
+                    color: '#ff6f00',
                     textShadow: `0 0 2px #fff, 0 0 4px #fff, 0 0 8px #fff, 0 0 12px #ea580c, 0 0 24px #ea580c`,
                     zIndex: 3,
                     letterSpacing: '0.25em',

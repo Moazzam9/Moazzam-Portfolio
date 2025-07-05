@@ -6,13 +6,13 @@ const Education: React.FC = () => {
     {
       title: 'Bachelor of Computer Science',
       institution: 'COMSATS University Islamabad',
-      period: '2021 - 2025',
+      period: '2022 - present',
       description: 'Focusing on software engineering, web development, and computer systems. Maintaining a strong academic record while actively participating in coding competitions.',
       type: 'education'
     },
     {
-      title: 'Intermediate in Computer Science',
-      institution: 'Punjab Group of Colleges',
+      title: 'FSC Pre Engineering',
+      institution: 'Scholar Science Colleges',
       period: '2019 - 2021',
       description: 'Completed pre-engineering with computer science subjects. Developed foundation in programming and mathematics.',
       type: 'education'
@@ -28,9 +28,9 @@ const Education: React.FC = () => {
       type: 'certification'
     },
     {
-      title: 'JavaScript Algorithms and Data Structures',
+      title: 'HTML, CSS, JavaScript Algorithms and Data Structures',
       institution: 'freeCodeCamp',
-      period: '2023',
+      period: '2024',
       description: 'In-depth study of JavaScript programming, algorithms, and data structures with hands-on projects.',
       type: 'certification'
     },
@@ -48,13 +48,7 @@ const Education: React.FC = () => {
       description: 'Custom theme development, plugin creation, and WordPress best practices for dynamic websites.',
       type: 'certification'
     },
-    {
-      title: 'Database Design and Management',
-      institution: 'Stanford Online',
-      period: '2022',
-      description: 'Comprehensive course on database design, SQL, normalization, and database optimization techniques.',
-      type: 'certification'
-    }
+   
   ];
 
   const allItems = [...educationItems, ...certifications].sort((a, b) => {
