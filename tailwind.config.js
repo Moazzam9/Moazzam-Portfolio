@@ -36,11 +36,13 @@ export default {
         },
       },
       animation: {
-        'float': 'float 6s ease-in-out infinite',
+        float: 'float 6s ease-in-out infinite',
         'bounce-slow': 'bounce 2s infinite',
         'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
         'spin-slow': 'spin 8s linear infinite',
-        'wiggle': 'wiggle 1s ease-in-out infinite',
+        wiggle: 'wiggle 1s ease-in-out infinite',
+        backgroundPulse: 'backgroundPulse 6s ease-in-out infinite',
+        'ping-slow': 'ping 3s cubic-bezier(0, 0, 0.2, 1) infinite',
       },
       keyframes: {
         float: {
@@ -49,12 +51,16 @@ export default {
           },
           '50%': {
             transform: 'translateY(-20px) rotate(5deg)',
-          }
+          },
         },
         wiggle: {
           '0%, 100%': { transform: 'rotate(-3deg)' },
           '50%': { transform: 'rotate(3deg)' },
-        }
+        },
+        backgroundPulse: {
+          '0%, 100%': { backgroundPosition: '0% 50%' },
+          '50%': { backgroundPosition: '100% 50%' },
+        },
       },
       perspective: {
         '1000': '1000px',
@@ -64,8 +70,8 @@ export default {
         'preserve-3d': 'preserve-3d',
       },
       backfaceVisibility: {
-        'hidden': 'hidden',
-      }
+        hidden: 'hidden',
+      },
     },
   },
   plugins: [],

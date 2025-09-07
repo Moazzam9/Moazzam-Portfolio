@@ -73,16 +73,21 @@ const About: React.FC = () => {
 
           <div className="grid lg:grid-cols-2 gap-16 items-center">
             {/* Profile Image */}
-            <div className={`relative transition-all duration-1000 delay-200 ${isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-10'}`}>
-              <div className="w-full max-w-md mx-auto relative group">
-                <div className="aspect-square bg-gradient-to-br from-orange-500 to-orange-700 rounded-2xl p-1">
-                  <div className="w-full h-full bg-gray-900 rounded-2xl flex items-center justify-center relative overflow-hidden">
-                    <div className="text-8xl text-gray-700">👨‍💻</div>
-                  </div>
-                </div>
-                <div className="absolute -z-10 top-8 left-8 w-full h-full bg-orange-600/20 rounded-2xl"></div>
-              </div>
-            </div>
+           <div className={`relative transition-all duration-1000 delay-200 ${isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-10'}`}>
+  <div className="w-full max-w-md mx-auto relative group">
+    <div className="aspect-square bg-gradient-to-br from-orange-500 to-orange-700 rounded-2xl p-1">
+      <div className="w-full h-full bg-gray-900 rounded-2xl flex items-center justify-center relative overflow-hidden">
+        {/* Replace emoji with profile image */}
+        <img 
+          src="/profile.jpeg" 
+          alt="Profile" 
+          className="w-full h-full object-cover rounded-2xl" 
+        />
+      </div>
+    </div>
+    <div className="absolute -z-10 top-8 left-8 w-full h-full bg-orange-600/20 rounded-2xl"></div>
+  </div>
+</div>
 
             {/* About Content */}
             <div className={`space-y-6 transition-all duration-1000 delay-400 ${isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-10'}`}>
