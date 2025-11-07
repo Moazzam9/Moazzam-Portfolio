@@ -32,45 +32,54 @@ const LiquidFillButton: React.FC<LiquidFillButtonProps> = ({
 
   useEffect(() => {
     let animationFrame: number;
-    let startTime: number | undefined;
+    let startTime: number | null = null;
     let running = true;
 
-    const animateFill = (timestamp: number, localStartProgress: number) => {
+    const animate = (timestamp: number) => {
       if (!startTime) startTime = timestamp;
       const elapsed = timestamp - startTime;
-      const progress = Math.min(elapsed / animationDuration, 1);
-      // Smooth cubic ease-out
-      const easedProgress = localStartProgress + (1 - Math.pow(1 - progress, 3)) * (1 - localStartProgress);
-      setFillProgress(easedProgress);
-      if (progress < 1 && running) {
-        animationFrame = requestAnimationFrame((ts) => animateFill(ts, localStartProgress));
+      
+      if (isHovered) {
+        // Filling up
+        const progress = Math.min(elapsed / animationDuration, 1);
+        const easedProgress = progress < 0.5
+          ? 2 * progress * progress
+          : 1 - Math.pow(-2 * progress + 2, 2) / 2;
+          
+        setFillProgress(easedProgress);
+        
+        if (progress < 1) {
+          animationFrame = requestAnimationFrame(animate);
+        } else {
+          setFillProgress(1);
+        }
       } else {
-        setFillProgress(1);
+        // Draining
+        const drainDuration = animationDuration * 0.7;
+        const progress = Math.min(elapsed / drainDuration, 1);
+        const easedProgress = 1 - progress;
+        
+        setFillProgress(easedProgress);
+        
+        if (progress < 1) {
+          animationFrame = requestAnimationFrame(animate);
+        } else {
+          setFillProgress(0);
+        }
       }
     };
 
-    const animateDrain = (timestamp: number, localStartProgress: number) => {
-      if (!startTime) startTime = timestamp;
-      const drainDuration = animationDuration * 0.7;
-      const elapsed = timestamp - startTime;
-      const progress = Math.min(elapsed / drainDuration, 1);
-      // Smooth quadratic ease-in
-      const easedProgress = localStartProgress * (1 - Math.pow(progress, 2));
-      setFillProgress(easedProgress);
-      if (progress < 1 && running) {
-        animationFrame = requestAnimationFrame((ts) => animateDrain(ts, localStartProgress));
-      } else {
-        setFillProgress(0);
+    // Start the animation
+    startTime = null;
+    animationFrame = requestAnimationFrame(animate);
+    
+    // Cleanup function
+    return () => {
+      running = false;
+      if (animationFrame) {
+        cancelAnimationFrame(animationFrame);
       }
     };
-
-    if (isHovered) {
-      const localStartProgress = fillProgress;
-      animationFrame = requestAnimationFrame((ts) => animateFill(ts, localStartProgress));
-    } else {
-      const localStartProgress = fillProgress;
-      animationFrame = requestAnimationFrame((ts) => animateDrain(ts, localStartProgress));
-    }
 
     return () => {
       running = false;
@@ -82,6 +91,11 @@ const LiquidFillButton: React.FC<LiquidFillButtonProps> = ({
   const handleClick = (e: React.MouseEvent) => {
     if (disabled) return;
     if (onClick) onClick();
+  };
+
+  // Handle mouse leave to ensure smooth animation
+  const handleMouseLeave = () => {
+    setIsHovered(false);
   };
 
   const getLiquidClipPath = () => {
@@ -107,13 +121,13 @@ const LiquidFillButton: React.FC<LiquidFillButtonProps> = ({
   const getVariantClasses = () => {
     switch (variant) {
       case 'primary':
-        return 'bg-transparent border-2 border-orange-500 text-orange-500';
+        return `bg-transparent border-2 border-orange-500 text-orange-500 hover:text-white`;
       case 'secondary':
-        return 'bg-transparent border-2 border-gray-400 text-gray-300';
+        return 'bg-transparent border-2 border-gray-400 text-gray-700 dark:text-gray-300 hover:text-white dark:hover:text-white';
       case 'ghost':
-        return 'bg-transparent border-2 border-orange-500/50 text-orange-500';
+        return 'bg-transparent border-2 border-orange-500/50 text-orange-500 hover:text-white';
       default:
-        return 'bg-transparent border-2 border-orange-500 text-orange-500';
+        return 'bg-transparent border-2 border-orange-500 text-orange-500 hover:text-white';
     }
   };
 
@@ -150,16 +164,20 @@ const LiquidFillButton: React.FC<LiquidFillButtonProps> = ({
     ${isHovered ? 'scale-105 shadow-xl' : 'scale-100 shadow-md'}
     ${disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}
     ${className}
+    group
   `;
 
   const ButtonContent = () => (
     <>
       {/* Liquid Fill Background */}
       <div
-        className={`absolute inset-0 bg-gradient-to-r ${getLiquidColors()} transition-all duration-300`}
+        className={`absolute inset-0 bg-gradient-to-r ${getLiquidColors()}`}
         style={{
           clipPath: getLiquidClipPath(),
-          opacity: fillProgress > 0 ? 1 : 0
+          opacity: fillProgress > 0 ? 1 : 0,
+          transition: 'clip-path 0.3s ease-out, opacity 0.2s ease-out',
+          willChange: 'clip-path, opacity',
+          pointerEvents: 'none'
         }}
       />
 
@@ -183,7 +201,7 @@ const LiquidFillButton: React.FC<LiquidFillButtonProps> = ({
         href={href}
         className={buttonClasses}
         onMouseEnter={() => setIsHovered(true)}
-        onMouseLeave={() => setIsHovered(false)}
+        onMouseLeave={handleMouseLeave}
         onClick={handleClick}
       >
         <ButtonContent />
@@ -196,7 +214,7 @@ const LiquidFillButton: React.FC<LiquidFillButtonProps> = ({
       ref={buttonRef}
       className={buttonClasses}
       onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
+      onMouseLeave={handleMouseLeave}
       onClick={handleClick}
       disabled={disabled}
     >

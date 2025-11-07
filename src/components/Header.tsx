@@ -52,7 +52,7 @@ const Header: React.FC = () => {
   return (
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled
-        ? 'bg-black/80 backdrop-blur-md shadow-lg'
+        ? 'bg-white/90 dark:bg-black/80 backdrop-blur-md shadow-lg'
         : 'bg-transparent'
         }`}
     >
@@ -81,7 +81,8 @@ const Header: React.FC = () => {
             <ThemeToggle theme={theme} toggleTheme={toggleTheme} />
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="p-2 text-gray-300"
+              className="p-2 text-gray-600 dark:text-gray-300 hover:text-orange-500 dark:hover:text-orange-400 transition-colors"
+              aria-label={isMobileMenuOpen ? 'Close menu' : 'Open menu'}
             >
               {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
             </button>
@@ -90,12 +91,12 @@ const Header: React.FC = () => {
 
         {/* Mobile Menu */}
         {isMobileMenuOpen && (
-          <div className="md:hidden mt-4 py-4 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md rounded-lg">
+          <div className="md:hidden mt-4 py-2 bg-white dark:bg-slate-900 rounded-lg shadow-xl border border-gray-200 dark:border-gray-800">
             {navItems.map((item) => (
               <button
                 key={item.name}
                 onClick={() => scrollToSection(item.href)}
-                className="block w-full text-left px-4 py-2 text-gray-300 hover:text-orange-500 transition-colors duration-200"
+                className="block w-full text-left px-6 py-3 text-gray-900 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-slate-800/50 hover:text-orange-500 dark:hover:text-orange-400 transition-colors duration-200 font-medium"
               >
                 {item.name}
               </button>
