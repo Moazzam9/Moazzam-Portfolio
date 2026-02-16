@@ -4,8 +4,8 @@ import { Github, Linkedin, Instagram, ChevronDown, Code, Sparkles, Mail, MousePo
 import LiquidFillButton from './LiquidFillButton';
 
 const Hero: React.FC = () => {
-  const [isVisible, setIsVisible] = useState(false);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const mousePositionRef = useRef({ x: 0, y: 0 });
   const [currentTextIndex, setCurrentTextIndex] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
@@ -26,17 +26,34 @@ const Hero: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    setIsVisible(true);
+    let frameId: number | null = null;
 
     const handleMouseMove = (e: MouseEvent) => {
-      setMousePosition({
-        x: (e.clientX / window.innerWidth) * 100,
-        y: (e.clientY / window.innerHeight) * 100,
-      });
+      // Skip heavy mouse-based effects on small screens to avoid jank
+      if (window.innerWidth < 768) return;
+
+      const x = (e.clientX / window.innerWidth) * 100;
+      const y = (e.clientY / window.innerHeight) * 100;
+
+      mousePositionRef.current = { x, y };
+
+      // Throttle state updates to once per animation frame
+      if (frameId === null) {
+        frameId = requestAnimationFrame(() => {
+          setMousePosition(mousePositionRef.current);
+          frameId = null;
+        });
+      }
     };
 
     window.addEventListener('mousemove', handleMouseMove);
-    return () => window.removeEventListener('mousemove', handleMouseMove);
+
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+      if (frameId !== null) {
+        cancelAnimationFrame(frameId);
+      }
+    };
   }, []);
 
   const socialLinks = [
