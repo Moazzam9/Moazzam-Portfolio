@@ -45,8 +45,20 @@ const Projects: React.FC = () => {
       codeLink: 'https://github.com/Moazzam9/launch-kits',
       gradient: 'from-orange-500 to-orange-400'
     },
+
     {
-      id: 2,
+  id: 2,
+  title: 'NeonForge Gaming Commerce Platform',
+  description: 'A futuristic gaming commerce platform built for performance and immersion. NeonForge combines high-speed hardware shopping with gamification, featuring instant-load armory browsing, real-time tactical loadouts, and an XP-based progression system that rewards purchases with perks like priority shipping, beta hardware access, and exclusive gear. Includes secure admin “Overseer” dashboards for managing products, tracking activity, and controlling deployments. Built with a modern AI-ready architecture for future automation and intelligent features.',
+  image: '/neonforge.JPG',
+  tech: ['Next.js 15', 'React 19', 'Tailwind CSS', 'Firebase', 'Genkit'],
+  category: 'Web',
+  demoLink: 'https://neonforge-one.vercel.app/',
+  codeLink: '#',
+  gradient: 'from-gray-900 to-black'
+},
+    {
+      id: 3,
       title: 'LuxeFinds E-Commerce Platform',
       description: 'Full-stack e-commerce solution with payment integration and admin dashboard.',
       image: '/2.JPG',
@@ -57,19 +69,19 @@ const Projects: React.FC = () => {
       gradient: 'from-orange-600 to-orange-400'
     },
     {
-      id: 3,
-      title: 'Portfolio Website',
-      description: 'Modern, responsive portfolio website built with React and Tailwind CSS.',
-      image: 'https://images.pexels.com/photos/196644/pexels-photo-196644.jpeg?auto=compress&cs=tinysrgb&w=800',
-      tech: ['React', 'TypeScript', 'Tailwind CSS', 'Vite'],
-      category: 'Web',
-      demoLink: '#',
-      codeLink: '#',
-      gradient: 'from-orange-400 to-gray-900'
-    },
+  id: 7,
+  title: 'Student Performance Predictor',
+  description: 'An interactive machine learning web application that predicts a student’s final exam score based on study habits, sleep patterns, attendance, previous performance, extracurricular activities, class participation, and stress levels. The system uses advanced ML models such as Random Forest (with optional XGBoost) and provides real-time predictions through a Streamlit interface along with data visualizations to analyze how lifestyle and academic factors influence student performance.',
+  image: '/SPP.JPG',
+  tech: ['Python', 'Pandas', 'NumPy', 'Scikit-learn', 'XGBoost', 'Streamlit', 'Matplotlib'],
+  category: 'Machine Learning',
+  demoLink: 'https://student-performance-predictor-moazzam.streamlit.app/',
+  codeLink: 'https://github.com/Moazzam9/student-performance-predictor',
+  gradient: 'from-gray-900 to-black'
+},
     {
-      id: 4,
-      title: 'Servify (Under Development)',
+      id: 5,
+      title: 'Servify ',
       description: 'Servify Application is a comprehensive service platform that connects users with professional service providers such as plumbers, electricians, carpenters, doctors (for both pets and humans), and event decorators.',
       image: 'https://images.pexels.com/photos/3183150/pexels-photo-3183150.jpeg?auto=compress&cs=tinysrgb&w=800',
       tech: ['React Native', 'Firebase', 'Redux', 'AsyncStorage'],
@@ -78,8 +90,31 @@ const Projects: React.FC = () => {
       codeLink: '#',
       gradient: 'from-black to-gray-800'
     },
-    {
-      id: 5,
+ 
+     {
+  id: 6,
+  title: 'Inventory Management System',
+  description: 'Desktop-based inventory management system for tracking products, stock levels, sales, and suppliers with a clean dashboard interface.',
+  image: 'https://images.pexels.com/photos/4483610/pexels-photo-4483610.jpeg?auto=compress&cs=tinysrgb&w=800',
+  tech: ['React', 'Electron', 'Node.js', 'MySQL'],
+  category: 'Desktop',
+  demoLink: 'https://ims-zeta-three.vercel.app/',
+  codeLink: 'https://github.com/Moazzam9/IMS',
+  gradient: 'from-gray-900 to-black'
+},
+{
+  id: 8,
+  title: 'Breast Cancer Classification (PyTorch)',
+  description: 'A deep learning project that performs binary classification of breast cancer tumors using a PyTorch-based Multi-Layer Perceptron (MLP). Built on the Breast Cancer Wisconsin Diagnostic dataset from scikit-learn, the model uses a neural architecture with a hidden ReLU layer to predict malignant or benign tumors. The training pipeline includes BCEWithLogitsLoss, Adam optimizer, and 100 training epochs, with evaluation through accuracy metrics, confusion matrix analysis, and reproducibility ensured via fixed random seeds.',
+  image: 'https://images.pexels.com/photos/3825527/pexels-photo-3825527.jpeg?auto=compress&cs=tinysrgb&w=800',
+  tech: ['Python', 'PyTorch', 'NumPy', 'Scikit-learn'],
+  category: 'Deep Learning',
+  demoLink: '#',
+  codeLink: 'https://github.com/Moazzam9/cancer-classifier',
+  gradient: 'from-gray-900 to-black'
+},
+  {
+      id: 7,
       title: 'Zebra Puzzle Game',
       description: 'The application provides an engaging user interface for solving various logic puzzles while offering features like puzzle selection, hints, and real-time feedback.',
       image: '/3.jpg',
@@ -88,18 +123,7 @@ const Projects: React.FC = () => {
       demoLink: 'https://github.com/Moazzam9/Zebra-Puzzle-Game/tree/master',
       codeLink: 'https://github.com/Moazzam9/Zebra-Puzzle-Game/tree/master',
       gradient: 'from-orange-600 to-orange-400'
-    },
-    {
-      id: 6,
-      title: 'Weather Forecast App',
-      description: 'Mobile weather application with location-based forecasts and beautiful UI.',
-      image: 'https://images.pexels.com/photos/1118873/pexels-photo-1118873.jpeg?auto=compress&cs=tinysrgb&w=800',
-      tech: ['Flutter', 'Dart', 'Weather API', 'SQLite'],
-      category: 'Mobile',
-      demoLink: '#',
-      codeLink: '#',
-      gradient: 'from-gray-900 to-black'
-    },
+    }
   ];
 
   const filteredProjects = activeFilter === 'All'
