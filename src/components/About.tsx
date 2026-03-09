@@ -1,138 +1,69 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { Code, Users, Award, Coffee, Sparkles, Code2, Cpu, Rocket } from 'lucide-react';
-import { motion, useAnimation, useInView } from 'framer-motion';
+import { Sparkles, Code2, Cpu, Rocket } from 'lucide-react';
+import { motion, useInView } from 'framer-motion';
 import LiquidFillButton from './LiquidFillButton';
+
+// Stats configuration outside component
+const stats = [
+  { 
+    icon: '/complete.png',
+    label: 'Projects Completed', 
+    value: '50+', 
+    color: 'from-orange-400 to-orange-600' 
+  },
+  { 
+    icon: '/user-avatar.png',
+    label: 'Happy Clients', 
+    value: '15+', 
+    color: 'from-orange-400 to-orange-600' 
+  },
+  { 
+    icon: '/certificate.png',
+    label: 'Certifications', 
+    value: '5+', 
+    color: 'from-orange-400 to-orange-600' 
+  },
+  { 
+    icon: '/coffee-cup.png',
+    label: 'Cups of Coffee', 
+    value: '500+', 
+    color: 'from-orange-400 to-orange-600' 
+  },
+];
+
+const container = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1,
+      delayChildren: 0.3
+    }
+  }
+};
+
+const item = {
+  hidden: { y: 20, opacity: 0 },
+  visible: {
+    y: 0,
+    opacity: 1,
+    transition: {
+      duration: 0.5,
+      ease: [0.25, 0.1, 0.25, 1] as const
+    }
+  }
+};
 
 const About: React.FC = () => {
   const [isVisible, setIsVisible] = useState(false);
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const sectionRef = useRef<HTMLElement>(null);
-  const controls = useAnimation();
   const isInView = useInView(sectionRef, { once: true, amount: 0.2 });
 
   useEffect(() => {
-    if (isInView) {
-      controls.start('visible');
+    if (isInView && !isVisible) {
       setIsVisible(true);
     }
-  }, [controls, isInView]);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true);
-        }
-      },
-      { threshold: 0.1 }
-    );
-
-    if (sectionRef.current) {
-      observer.observe(sectionRef.current);
-    }
-
-    const handleMouseMove = (e: MouseEvent) => {
-      if (sectionRef.current) {
-        const rect = sectionRef.current.getBoundingClientRect();
-        setMousePosition({
-          x: ((e.clientX - rect.left) / rect.width) * 100,
-          y: ((e.clientY - rect.top) / rect.height) * 100,
-        });
-      }
-    };
-
-    window.addEventListener('mousemove', handleMouseMove);
-    return () => {
-      observer.disconnect();
-      window.removeEventListener('mousemove', handleMouseMove);
-    };
-  }, []);
-
-  const stats = [
-    { 
-      customIcon: true,
-      icon: () => (
-        <div className="bg-white p-1.5 rounded-full">
-          <img 
-            src="/complete.png" 
-            alt="Projects Completed" 
-            className="w-7 h-7 object-contain"
-          />
-        </div>
-      ),
-      label: 'Projects Completed', 
-      value: '50+', 
-      color: 'from-orange-400 to-orange-600' 
-    },
-    { 
-      customIcon: true,
-      icon: () => (
-        <div className="w-10 h-10 rounded-full overflow-hidden border-2 border-white">
-          <img 
-            src="/user-avatar.png" 
-            alt="Happy Client" 
-            className="w-full h-full object-cover"
-          />
-        </div>
-      ),
-      label: 'Happy Clients', 
-      value: '15+', 
-      color: 'from-orange-400 to-orange-600' 
-    },
-    { 
-      customIcon: true,
-      icon: () => (
-        <div className="bg-white p-1.5 rounded-full">
-          <img 
-            src="/certificate.png" 
-            alt="Certificate" 
-            className="w-7 h-7 object-contain"
-          />
-        </div>
-      ),
-      label: 'Certifications', 
-      value: '5+', 
-      color: 'from-orange-400 to-orange-600' 
-    },
-    { 
-      customIcon: true,
-      icon: () => (
-        <div className="bg-white p-1.5 rounded-full">
-          <img 
-            src="/coffee-cup.png" 
-            alt="Coffee Cup" 
-            className="w-7 h-7 object-contain"
-          />
-        </div>
-      ),
-      label: 'Cups of Coffee', 
-      value: '500+', 
-      color: 'from-orange-400 to-orange-600' 
-    },
-  ];
-
-  const container = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1,
-        delayChildren: 0.3
-      }
-    }
-  };
-
-  const item = {
-    hidden: { y: 20, opacity: 0 },
-    visible: {
-      y: 0,
-      opacity: 1,
-      transition: {
-        duration: 0.5,
-        ease: "easeOut"
-      }
-    }
-  };
+  }, [isInView, isVisible]);
 
   return (
     <section ref={sectionRef} id="about" className="py-20 bg-gradient-to-br from-white via-gray-50 to-gray-100 dark:from-gray-900 dark:via-gray-900 dark:to-gray-950 relative overflow-hidden">
@@ -148,7 +79,7 @@ const About: React.FC = () => {
         <motion.div 
           className="max-w-6xl mx-auto"
           initial="hidden"
-          animate={controls}
+          animate={isInView ? "visible" : "hidden"}
           variants={container}
         >
           <motion.div 
@@ -285,13 +216,9 @@ const About: React.FC = () => {
                 transition={{ type: 'spring', stiffness: 400, damping: 10 }}
               >
                 <div className={`w-20 h-20 bg-gradient-to-br ${stat.color} rounded-2xl flex items-center justify-center mx-auto mb-5 transition-all duration-500 shadow-lg group-hover:shadow-xl group-hover:shadow-orange-500/20`}>
-                  {stat.customIcon ? (
-                    <div className="bg-white/90 p-2.5 rounded-xl">
-                      <stat.icon />
-                    </div>
-                  ) : (
-                    <stat.icon className="text-white" size={28} />
-                  )}
+                  <div className="bg-white/90 p-2.5 rounded-xl">
+                    <img src={stat.icon} alt={stat.label} className="w-7 h-7 object-contain" />
+                  </div>
                 </div>
                 <div className="text-4xl font-bold text-slate-800 dark:text-white mb-2 group-hover:text-orange-600 dark:group-hover:text-orange-400 transition-colors">
                   {stat.value}

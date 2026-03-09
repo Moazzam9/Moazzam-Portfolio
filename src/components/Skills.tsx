@@ -1,105 +1,74 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useRef } from 'react';
 import { motion, useInView } from 'framer-motion';
 import { Code, Database, Cpu, Zap, ChevronRight } from 'lucide-react';
+
+const iconMap = {
+  'Frontend Development': <Code className="w-6 h-6" />,
+  'Backend Development': <Cpu className="w-6 h-6" />,
+  'Database & Tools': <Database className="w-6 h-6" />
+};
+
+const skillCategories = [
+  {
+    title: 'Frontend Development',
+    skills: [
+      { name: 'HTML/CSS', level: 90 },
+      { name: 'JavaScript', level: 85 },
+      { name: 'React.js', level: 90 },
+      { name: 'Next.js', level: 90 },
+      { name: 'React Native', level: 80 },
+      { name: 'TypeScript', level: 75 },
+      { name: 'Tailwind CSS', level: 85 },
+    ]
+  },
+  {
+    title: 'Backend Development',
+    skills: [
+      { name: 'Node.js', level: 70 },
+      { name: 'Python', level: 80 },
+      { name: 'Java', level: 75 },
+      { name: 'PHP', level: 70 },
+      { name: 'Express.js', level: 65 },
+    ]
+  },
+  {
+    title: 'Database & Tools',
+    skills: [
+      { name: 'MySQL', level: 80 },
+      { name: 'MongoDB', level: 70 },
+      { name: 'Git/GitHub', level: 85 },
+      { name: 'WordPress', level: 75 },
+      { name: 'Firebase', level: 70 },
+    ]
+  }
+];
+
+const container = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1,
+      delayChildren: 0.3
+    }
+  }
+};
+
+const item = {
+  hidden: { y: 20, opacity: 0 },
+  visible: {
+    y: 0,
+    opacity: 1,
+    transition: {
+      duration: 0.5,
+      ease: [0.25, 0.1, 0.25, 1] as const
+    }
+  }
+};
 
 const Skills: React.FC = () => {
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { once: true, amount: 0.2 });
-
-  const container = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1,
-        delayChildren: 0.3
-      }
-    }
-  };
-
-  const item = {
-    hidden: { y: 20, opacity: 0 },
-    visible: {
-      y: 0,
-      opacity: 1,
-      transition: {
-        duration: 0.5,
-        ease: "easeOut"
-      }
-    }
-  };
-
-  const iconMap = {
-    'Frontend Development': <Code className="w-6 h-6" />,
-    'Backend Development': <Cpu className="w-6 h-6" />,
-    'Database & Tools': <Database className="w-6 h-6" />
-  };
-  const skillCategories = [
-    {
-      title: 'Frontend Development',
-      skills: [
-        { name: 'HTML/CSS', level: 90 },
-        { name: 'JavaScript', level: 85 },
-        { name: 'React', level: 80 },
-        { name: 'TypeScript', level: 75 },
-        { name: 'Tailwind CSS', level: 85 },
-      ]
-    },
-    {
-      title: 'Backend Development',
-      skills: [
-        { name: 'Node.js', level: 70 },
-        { name: 'Python', level: 80 },
-        { name: 'Java', level: 75 },
-        { name: 'PHP', level: 70 },
-        { name: 'Express.js', level: 65 },
-      ]
-    },
-    {
-      title: 'Database & Tools',
-      skills: [
-        { name: 'MySQL', level: 80 },
-        { name: 'MongoDB', level: 70 },
-        { name: 'Git/GitHub', level: 85 },
-        { name: 'WordPress', level: 75 },
-        { name: 'Firebase', level: 70 },
-      ]
-    }
-  ];
-
-  // State to animate each skill bar
-  const [fillLevels, setFillLevels] = useState(
-    skillCategories.map(cat => cat.skills.map(() => 0))
-  );
-  const [glow, setGlow] = useState(
-    skillCategories.map(cat => cat.skills.map(() => false))
-  );
-
-  useEffect(() => {
-    if (isInView) {
-      // Animate each bar
-      skillCategories.forEach((cat, catIdx) => {
-        cat.skills.forEach((skill, skillIdx) => {
-          setTimeout(() => {
-            setFillLevels(prev => {
-              const updated = prev.map(arr => [...arr]);
-              updated[catIdx][skillIdx] = skill.level;
-              return updated;
-            });
-            // Add glow after fill
-            setTimeout(() => {
-              setGlow(prev => {
-                const updated = prev.map(arr => [...arr]);
-                updated[catIdx][skillIdx] = true;
-                return updated;
-              });
-            }, 1100);
-          }, 300 * (catIdx * 5 + skillIdx));
-        });
-      });
-    }
-    // eslint-disable-next-line
-  }, [isInView]);
 
   return (
     <section ref={ref} id="skills" className="py-20 bg-gradient-to-br from-white via-gray-50 to-gray-100 dark:from-gray-900 dark:via-gray-900 dark:to-black relative overflow-hidden">
@@ -158,7 +127,7 @@ const Skills: React.FC = () => {
                 {/* Skills list */}
                 <div className="space-y-6 relative z-10">
                   {category.skills.map((skill, skillIndex) => (
-                    <div key={skillIndex} className="group">
+                    <div key={skillIndex} className="group/skill">
                       <div className="flex justify-between items-center mb-2">
                         <span className="text-gray-800 dark:text-gray-200 font-medium">
                           {skill.name}
@@ -183,9 +152,9 @@ const Skills: React.FC = () => {
                 
                 {/* View more button */}
                 <div className="mt-8 pt-6 border-t border-gray-100 dark:border-gray-800">
-                  <button className="flex items-center text-sm font-medium text-orange-500 hover:text-orange-600 dark:hover:text-orange-400 transition-colors group">
+                  <button className="flex items-center text-sm font-medium text-orange-500 hover:text-orange-600 dark:hover:text-orange-400 transition-colors group/btn">
                     View all {category.title.split(' ')[0]} skills
-                    <ChevronRight className="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" />
+                    <ChevronRight className="w-4 h-4 ml-1 group-hover/btn:translate-x-1 transition-transform" />
                   </button>
                 </div>
               </motion.div>
@@ -193,30 +162,6 @@ const Skills: React.FC = () => {
           </div>
         </motion.div>
       </div>
-      
-      {/* Blob animation styles */}
-      <style jsx global>{`
-        @keyframes blob {
-          0% {
-            transform: translate(0px, 0px) scale(1);
-          }
-          33% {
-            transform: translate(30px, -20px) scale(1.1);
-          }
-          66% {
-            transform: translate(-20px, 20px) scale(0.9);
-          }
-          100% {
-            transform: translate(0px, 0px) scale(1);
-          }
-        }
-        .animate-blob {
-          animation: blob 7s infinite;
-        }
-        .animation-delay-2000 {
-          animation-delay: 2s;
-        }
-      `}</style>
     </section>
   );
 };

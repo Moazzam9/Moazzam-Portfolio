@@ -1,23 +1,93 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, memo } from 'react';
 import { motion, useInView, AnimatePresence } from 'framer-motion';
-import { Github, Linkedin, Instagram, ChevronDown, Code, Sparkles, Mail, MousePointerClick } from 'lucide-react';
+import { Github, Linkedin, Instagram, ChevronDown, Code, Sparkles, Mail } from 'lucide-react';
 import LiquidFillButton from './LiquidFillButton';
 
+// Static floating elements configuration - no mouse tracking needed
+const floatingElements = [
+  { icon: Code, delay: 0, position: 'top-20 left-20', text: 'React' },
+  { icon: Sparkles, delay: 1, position: 'top-40 right-32', text: 'TypeScript' },
+  { icon: Code, delay: 2, position: 'bottom-40 left-32', text: 'Node.js' },
+  { icon: Sparkles, delay: 0.5, position: 'bottom-20 right-20', text: 'Next.js' },
+];
+
+const socialLinks = [
+  { icon: Github, href: 'https://github.com/Moazzam9', label: 'GitHub' },
+  { icon: Linkedin, href: 'https://www.linkedin.com/in/moazzam-azam-963778316', label: 'LinkedIn' },
+  { icon: Instagram, href: '#', label: 'Instagram' },
+];
+
+const roles = [
+  'Full Stack Developer',
+  'UI/UX Enthusiast',
+  'Problem Solver',
+  'Tech Enthusiast'
+];
+
+const container = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1,
+      delayChildren: 0.3
+    }
+  }
+};
+
+const item = {
+  hidden: { y: 20, opacity: 0 },
+  visible: {
+    y: 0,
+    opacity: 1,
+    transition: {
+      duration: 0.5,
+      ease: "easeOut"
+    }
+  }
+};
+
+// Memoized floating element to prevent re-renders
+const FloatingElement = memo(({ element, index, isInView }: { element: typeof floatingElements[0], index: number, isInView: boolean }) => (
+  <motion.div
+    className={`absolute ${element.position} group hidden md:block`}
+    initial={{ opacity: 0, y: 20 }}
+    animate={{ 
+      opacity: isInView ? 0.8 : 0,
+      y: isInView ? [0, -15, 0] : 20,
+    }}
+    transition={{
+      y: {
+        duration: 4 + index,
+        repeat: Infinity,
+        ease: "easeInOut",
+        delay: index * 0.5
+      },
+      opacity: { duration: 0.5, delay: index * 0.2 }
+    }}
+    style={{ willChange: 'transform, opacity' }}
+  >
+    <div className="relative">
+      <element.icon
+        size={40}
+        className="text-orange-400/80 dark:text-orange-500/80 transition-all duration-300 group-hover:text-orange-500 group-hover:scale-110"
+      />
+      <span className="absolute -bottom-8 left-1/2 -translate-x-1/2 text-xs font-medium text-orange-600 dark:text-orange-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap">
+        {element.text}
+      </span>
+    </div>
+  </motion.div>
+));
+
+FloatingElement.displayName = 'FloatingElement';
+
 const Hero: React.FC = () => {
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-  const mousePositionRef = useRef({ x: 0, y: 0 });
   const [currentTextIndex, setCurrentTextIndex] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { once: true, amount: 0.2 });
 
-  const roles = [
-    'Full Stack Developer',
-    'UI/UX Enthusiast',
-    'Problem Solver',
-    'Tech Enthusiast'
-  ];
-
+  // Text rotation effect - only state update needed
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentTextIndex((prev) => (prev + 1) % roles.length);
@@ -25,149 +95,37 @@ const Hero: React.FC = () => {
     return () => clearInterval(interval);
   }, []);
 
-  useEffect(() => {
-    let frameId: number | null = null;
-
-    const handleMouseMove = (e: MouseEvent) => {
-      // Skip heavy mouse-based effects on small screens to avoid jank
-      if (window.innerWidth < 768) return;
-
-      const x = (e.clientX / window.innerWidth) * 100;
-      const y = (e.clientY / window.innerHeight) * 100;
-
-      mousePositionRef.current = { x, y };
-
-      // Throttle state updates to once per animation frame
-      if (frameId === null) {
-        frameId = requestAnimationFrame(() => {
-          setMousePosition(mousePositionRef.current);
-          frameId = null;
-        });
-      }
-    };
-
-    window.addEventListener('mousemove', handleMouseMove);
-
-    return () => {
-      window.removeEventListener('mousemove', handleMouseMove);
-      if (frameId !== null) {
-        cancelAnimationFrame(frameId);
-      }
-    };
-  }, []);
-
-  const socialLinks = [
-    { icon: Github, href: 'https://github.com/Moazzam9', label: 'GitHub' },
-    { icon: Linkedin, href: 'https://www.linkedin.com/in/moazzam-azam-963778316?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app', label: 'LinkedIn' },
-    { icon: Instagram, href: '#', label: 'Instagram' },
-  ];
-
-  const floatingElements = [
-    { icon: Code, delay: 0, position: 'top-20 left-20', text: 'React' },
-    { icon: Sparkles, delay: 1, position: 'top-40 right-32', text: 'TypeScript' },
-    { icon: Code, delay: 2, position: 'bottom-40 left-32', text: 'Node.js' },
-    { icon: Sparkles, delay: 0.5, position: 'bottom-20 right-20', text: 'Next.js' },
-  ];
-
-  const container = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1,
-        delayChildren: 0.3
-      }
-    }
-  };
-
-  const item = {
-    hidden: { y: 20, opacity: 0 },
-    visible: {
-      y: 0,
-      opacity: 1,
-      transition: {
-        duration: 0.5,
-        ease: "easeOut"
-      }
-    }
-  };
-
   return (
     <section 
       ref={ref}
       id="home" 
       className="min-h-screen flex items-center justify-center relative overflow-hidden bg-gradient-to-br from-white via-gray-50 to-gray-100 dark:from-gray-900 dark:via-gray-900 dark:to-black"
     >
-      {/* Animated Background */}
-      <div className="absolute inset-0">
+      {/* Animated Background - CSS only, no JS state */}
+      <div className="absolute inset-0 pointer-events-none">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-orange-500/5 to-transparent"></div>
         <div className="absolute -top-20 -right-20 w-96 h-96 bg-orange-400/20 rounded-full mix-blend-multiply filter blur-3xl animate-blob"></div>
         <div className="absolute top-1/2 -left-20 w-80 h-80 bg-blue-400/20 rounded-full mix-blend-multiply filter blur-3xl animate-blob animation-delay-2000"></div>
         <div className="absolute -bottom-20 right-1/4 w-72 h-72 bg-orange-600/20 rounded-full mix-blend-multiply filter blur-3xl animate-blob animation-delay-4000"></div>
       </div>
 
-      {/* 3D Floating Elements */}
+      {/* 3D Floating Elements - memoized, no mouse tracking */}
       <div className="absolute inset-0 pointer-events-none">
-        {/* Floating code icons with text */}
         {floatingElements.map((element, index) => (
-          <motion.div
-            key={index}
-            className={`absolute ${element.position} group`}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ 
-              opacity: isInView ? 0.8 : 0,
-              y: isInView ? [0, -15, 0] : 20,
-              x: mousePosition.x * (0.01 + index * 0.003)
-            }}
-            transition={{
-              y: {
-                duration: 4 + index,
-                repeat: Infinity,
-                ease: "easeInOut",
-                delay: index * 0.5
-              },
-              x: {
-                duration: 0.1,
-                ease: "linear"
-              },
-              opacity: { duration: 0.5, delay: index * 0.2 }
-            }}
-          >
-            <div className="relative">
-              <element.icon
-                size={40}
-                className="text-orange-400/80 dark:text-orange-500/80 transition-all duration-300 group-hover:text-orange-500 group-hover:scale-110"
-              />
-              <span className="absolute -bottom-8 left-1/2 -translate-x-1/2 text-xs font-medium text-orange-600 dark:text-orange-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap">
-                {element.text}
-              </span>
-            </div>
-          </motion.div>
+          <FloatingElement key={index} element={element} index={index} isInView={isInView} />
         ))}
 
-        {/* Animated shapes */}
-        <motion.div
-          className="absolute top-1/4 left-1/4 w-32 h-32"
-          initial={{ opacity: 0 }}
-          animate={{ 
+        {/* Simplified rotating shape - CSS animation only */}
+        <div
+          className="absolute top-1/4 left-1/4 w-32 h-32 opacity-0"
+          style={{ 
             opacity: isInView ? 0.1 : 0,
-            rotate: 360,
-            x: mousePosition.x * 0.01
-          }}
-          transition={{ 
-            rotate: { duration: 20, repeat: Infinity, ease: "linear" },
-            opacity: { duration: 1, delay: 0.5 }
+            animation: isInView ? 'spin 20s linear infinite, fadeIn 1s ease-out 0.5s forwards' : 'none'
           }}
         >
-          <div className="w-full h-full bg-gradient-to-br from-orange-500 to-transparent rounded-full opacity-20"></div>
-        </motion.div>
+          <div className="w-full h-full bg-gradient-to-br from-orange-500 to-transparent rounded-full"></div>
+        </div>
       </div>
-
-      {/* Grid pattern overlay */}
-      <div className="absolute inset-0 opacity-10 dark:opacity-5" style={{ 
-        backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23f97316' fill-opacity='0.2'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
-        backgroundSize: '60px 60px'
-      }}></div>
 
       <div className="container mx-auto px-6 relative z-10 h-full flex items-center">
         <motion.div 
@@ -180,21 +138,10 @@ const Hero: React.FC = () => {
             className="relative"
             variants={item}
           >
-            {/* Glowing background effect */}
-            <motion.div 
-              className="absolute inset-0 bg-gradient-to-r from-orange-100/40 to-orange-300/40 dark:from-orange-400/20 dark:to-orange-500/20 blur-3xl rounded-full transform scale-150"
-              initial={{ opacity: 0 }}
-              animate={{ 
-                opacity: isInView ? 1 : 0,
-                scale: [1, 1.1, 1],
-              }}
-              transition={{ 
-                duration: 4, 
-                repeat: Infinity, 
-                ease: "easeInOut",
-                repeatType: "reverse"
-              }}
-            ></motion.div>
+            {/* Glowing background effect - simplified */}
+            <div 
+              className="absolute inset-0 bg-gradient-to-r from-orange-100/40 to-orange-300/40 dark:from-orange-400/20 dark:to-orange-500/20 blur-3xl rounded-full transform scale-150 animate-pulse-slow"
+            ></div>
 
             <motion.h1 
               className="relative text-lg xs:text-xl sm:text-2xl md:text-3xl text-gray-700 dark:text-gray-300 mb-2 font-light"

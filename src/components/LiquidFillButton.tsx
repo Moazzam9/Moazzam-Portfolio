@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { DivideIcon as LucideIcon } from 'lucide-react';
 
 interface LiquidFillButtonProps {
@@ -12,6 +12,8 @@ interface LiquidFillButtonProps {
   disabled?: boolean;
   fillDirection?: 'bottom-up' | 'top-down' | 'left-right' | 'right-left' | 'center-out';
   animationDuration?: number;
+  onMouseEnter?: () => void;
+  onMouseLeave?: () => void;
 }
 
 const LiquidFillButton: React.FC<LiquidFillButtonProps> = ({
@@ -24,78 +26,60 @@ const LiquidFillButton: React.FC<LiquidFillButtonProps> = ({
   className = '',
   disabled = false,
   fillDirection = 'bottom-up',
-  animationDuration = 600
+  animationDuration = 600,
+  onMouseEnter,
+  onMouseLeave,
 }) => {
   const [isHovered, setIsHovered] = useState(false);
   const [fillProgress, setFillProgress] = useState(0);
-  const buttonRef = useRef<HTMLButtonElement>(null);
+  const rafRef = useRef<number | null>(null);
 
   useEffect(() => {
-    let animationFrame: number;
     let startTime: number | null = null;
-    let running = true;
+    const duration = isHovered ? animationDuration : animationDuration * 0.7;
+    const startProgress = fillProgress;
+    const targetProgress = isHovered ? 1 : 0;
 
     const animate = (timestamp: number) => {
       if (!startTime) startTime = timestamp;
       const elapsed = timestamp - startTime;
+      const linearProgress = Math.min(elapsed / duration, 1);
       
-      if (isHovered) {
-        // Filling up
-        const progress = Math.min(elapsed / animationDuration, 1);
-        const easedProgress = progress < 0.5
-          ? 2 * progress * progress
-          : 1 - Math.pow(-2 * progress + 2, 2) / 2;
-          
-        setFillProgress(easedProgress);
-        
-        if (progress < 1) {
-          animationFrame = requestAnimationFrame(animate);
-        } else {
-          setFillProgress(1);
-        }
-      } else {
-        // Draining
-        const drainDuration = animationDuration * 0.7;
-        const progress = Math.min(elapsed / drainDuration, 1);
-        const easedProgress = 1 - progress;
-        
-        setFillProgress(easedProgress);
-        
-        if (progress < 1) {
-          animationFrame = requestAnimationFrame(animate);
-        } else {
-          setFillProgress(0);
-        }
+      // Ease-in-out-quad easing (matches original smooth animation)
+      const easedProgress = linearProgress < 0.5
+        ? 2 * linearProgress * linearProgress
+        : 1 - Math.pow(-2 * linearProgress + 2, 2) / 2;
+      
+      const currentProgress = startProgress + (targetProgress - startProgress) * easedProgress;
+      setFillProgress(currentProgress);
+
+      if (linearProgress < 1) {
+        rafRef.current = requestAnimationFrame(animate);
       }
     };
 
-    // Start the animation
-    startTime = null;
-    animationFrame = requestAnimationFrame(animate);
-    
-    // Cleanup function
-    return () => {
-      running = false;
-      if (animationFrame) {
-        cancelAnimationFrame(animationFrame);
-      }
-    };
+    rafRef.current = requestAnimationFrame(animate);
 
     return () => {
-      running = false;
-      if (animationFrame) cancelAnimationFrame(animationFrame);
+      if (rafRef.current) {
+        cancelAnimationFrame(rafRef.current);
+      }
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isHovered, animationDuration]);
 
-  const handleClick = (e: React.MouseEvent) => {
+  const handleClick = () => {
     if (disabled) return;
     if (onClick) onClick();
   };
 
-  // Handle mouse leave to ensure smooth animation
+  const handleMouseEnter = () => {
+    setIsHovered(true);
+    onMouseEnter?.();
+  };
+
   const handleMouseLeave = () => {
     setIsHovered(false);
+    onMouseLeave?.();
   };
 
   const getLiquidClipPath = () => {
@@ -111,8 +95,7 @@ const LiquidFillButton: React.FC<LiquidFillButtonProps> = ({
       case 'right-left':
         return `inset(0 0 0 ${(1 - progress) * 100}%)`;
       case 'center-out':
-        const scale = progress;
-        return `circle(${scale * 70}% at 50% 50%)`;
+        return `circle(${progress * 70}% at 50% 50%)`;
       default:
         return `inset(${(1 - progress) * 100}% 0 0 0)`;
     }
@@ -169,21 +152,20 @@ const LiquidFillButton: React.FC<LiquidFillButtonProps> = ({
 
   const ButtonContent = () => (
     <>
-      {/* Liquid Fill Background */}
+      {/* Liquid Fill Background with RAF animation */}
       <div
         className={`absolute inset-0 bg-gradient-to-r ${getLiquidColors()}`}
         style={{
           clipPath: getLiquidClipPath(),
           opacity: fillProgress > 0 ? 1 : 0,
-          transition: 'clip-path 0.3s ease-out, opacity 0.2s ease-out',
-          willChange: 'clip-path, opacity',
+          transition: 'opacity 0.1s ease-out',
+          willChange: 'clip-path',
           pointerEvents: 'none'
         }}
       />
 
       {/* Content */}
-      <span className={`relative z-10 flex items-center justify-center gap-2 transition-colors duration-300 ${fillProgress > 0.5 ? 'text-white' : ''
-        }`}>
+      <span className={`relative z-10 flex items-center justify-center gap-2 transition-colors duration-300 ${fillProgress > 0.5 ? 'text-white' : ''}`}>
         {Icon && (
           <Icon
             size={size === 'sm' ? 16 : size === 'lg' ? 24 : 20}
@@ -200,7 +182,7 @@ const LiquidFillButton: React.FC<LiquidFillButtonProps> = ({
       <a
         href={href}
         className={buttonClasses}
-        onMouseEnter={() => setIsHovered(true)}
+        onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
         onClick={handleClick}
       >
@@ -211,9 +193,8 @@ const LiquidFillButton: React.FC<LiquidFillButtonProps> = ({
 
   return (
     <button
-      ref={buttonRef}
       className={buttonClasses}
-      onMouseEnter={() => setIsHovered(true)}
+      onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
       onClick={handleClick}
       disabled={disabled}
